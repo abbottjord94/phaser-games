@@ -24,6 +24,8 @@ let player;
 let aliens;
 let bullets;
 
+let bullet_timer = 0;
+
 function preload() {
 	this.load.image('player', 'assets/player.png');
 	this.load.image('bullet', 'assets/bullet.png');
@@ -32,8 +34,10 @@ function preload() {
 
 function create() {
 	cursors = this.input.keyboard.createCursorKeys();
-	player = this.physics.add.sprite(128,640,'player');
+	player = this.physics.add.sprite(128,700,'player');
 	player.setCollideWorldBounds(true);
+	
+	bullets = this.physics.add.group();
 
 }
 
@@ -49,7 +53,13 @@ function update() {
 		player.setVelocityX(0);
 	}
 	
-	if(cursors.space.isUp) {
-		
+	if(cursors.space.isDown) {
+		var t = game.getTime();
+		if(t > bullet_timer + 1000) {
+			var bullet = this.physics.add.sprite(player.x, player.y, 'bullet');
+			bullets.add(bullet);
+			bullet.setVelocityY(-600);
+			bullet_timer = game.getTime();
+		}
 	}
 }
